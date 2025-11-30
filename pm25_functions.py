@@ -5,7 +5,6 @@ Author: Drew
 """
 
 from data import AirQuality
-from collections import defaultdict
 
 
 """
@@ -16,15 +15,18 @@ Example input: [AirQuality("LA", "01/01/25", 15.0, 0.05), AirQuality("LA", "01/0
 Output given the example input: {"LA": {"avg_pm25": 17.5, "pm25_count": 2}, "SF": {"avg_pm25": 10.0, "pm25_count": 1}}
 """
 def calculate_pm25_city_averages(records):
-    city_data = defaultdict(lambda: {"pm25_sum": 0, "pm25_count": 0})
+    city_data = {}
     
     for record in records:
         if record.pm25 is not None:
+            if record.city not in city_data:
+                city_data[record.city] = {"pm25_sum": 0, "pm25_count": 0}
             city_data[record.city]["pm25_sum"] += record.pm25
             city_data[record.city]["pm25_count"] += 1
     
     city_averages = {}
-    for city, data in city_data.items():
+    for city in city_data:
+        data = city_data[city]
         city_averages[city] = {
             "avg_pm25": data["pm25_sum"] / data["pm25_count"],
             "pm25_count": data["pm25_count"]
@@ -41,13 +43,15 @@ Example input: [AirQuality("LA", "01/01/25", 60.0, 0.07), AirQuality("LA", "01/0
 Output given the example input: {"LA": 2}
 """
 def count_unhealthy_pm25_days(records):
-    city_unhealthy = defaultdict(int)
+    city_unhealthy = {}
     
     for record in records:
         if record.pm_unhealthy():
+            if record.city not in city_unhealthy:
+                city_unhealthy[record.city] = 0
             city_unhealthy[record.city] += 1
     
-    return dict(city_unhealthy)
+    return city_unhealthy
 
 
 """
@@ -58,8 +62,17 @@ Example input: {"LA": {"avg_pm25": 25.0}, "SF": {"avg_pm25": 10.0}, "SD": {"avg_
 Output given the example input: [("LA", 25.0), ("SD", 15.0), ("SF", 10.0)]
 """
 def rank_cities_by_pm25(city_averages):
-    cities_with_pm25 = [(city, data["avg_pm25"]) for city, data in city_averages.items()]
-    cities_with_pm25.sort(key=lambda x: x[1], reverse=True)
+    cities_with_pm25 = []
+    for city in city_averages:
+        data = city_averages[city]
+        cities_with_pm25.append((city, data["avg_pm25"]))
+    
+    # Sort by avg_pm25 descending (worst first)
+    for i in range(len(cities_with_pm25)):
+        for j in range(i + 1, len(cities_with_pm25)):
+            if cities_with_pm25[i][1] < cities_with_pm25[j][1]:
+                cities_with_pm25[i], cities_with_pm25[j] = cities_with_pm25[j], cities_with_pm25[i]
+    
     return cities_with_pm25
 
 
@@ -91,7 +104,10 @@ Example input: [AirQuality("LA", "01/01/25", 10.0, 0.05), AirQuality("LA", "01/0
 Output given the example input: {"min": 10.0, "max": 30.0, "avg": 20.0, "count": 3}
 """
 def get_pm25_statistics(records):
-    pm25_values = [record.pm25 for record in records if record.pm25 is not None]
+    pm25_values = []
+    for record in records:
+        if record.pm25 is not None:
+            pm25_values.append(record.pm25)
     
     return {
         "min": min(pm25_values),
@@ -109,11 +125,13 @@ Example input: [AirQuality("LA", "01/01/25", 8.0, 0.05), AirQuality("LA", "01/02
 Output given the example input: {"Good": 1, "Moderate": 1, "Unhealthy for Sensitive Groups": 0, "Unhealthy": 1}
 """
 def get_pm25_distribution(records):
-    distribution = defaultdict(int)
+    distribution = {}
     
     for record in records:
         if record.pm25 is not None:
             category = record.pm_level_category()
+            if category not in distribution:
+                distribution[category] = 0
             distribution[category] += 1
     
-    return dict(distribution)
+    return distribution

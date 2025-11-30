@@ -5,7 +5,7 @@ def ozone_averages(records):
     city_data = defaultdict(lambda: {"ozone_sum": 0, "ozone_count": 0})
     for record in records:
         if record.ozone is not None:
-            city_data[record.city]["ozone_sum"] += record.pm25
+            city_data[record.city]["ozone_sum"] += record.ozone
             city_data[record.city]["ozone_count"] += 1
 
     city_averages = {}
@@ -47,11 +47,11 @@ def ozone_category(value):
     if value is None:
         return "No Data"
     elif value <= 0.054:
-        return"Good"
+        return "Good"
     elif value <= 0.070:
         return "Moderate"
     elif value <= 0.085:
-        return "Unhealthy for certain groups"
+        return "Unhealthy for Sensitive Groups"
     else:
         return "Unhealthy"
 
@@ -60,6 +60,6 @@ def ozone_distribution(records):
     distribution = defaultdict(int)
     for record in records:
         if record.ozone is not None:
-            category = record.ozone_category()
+            category = record.ozone_level_category()
             distribution[category] += 1
     return dict(distribution)
