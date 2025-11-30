@@ -3,56 +3,23 @@ import data
 from data import AirQuality
 
 
-def pm25_air_quality_data(file):
-    pm25_data_air_quality = []
+def ozone_pm25_air_quality(file):
+    pm25_ozone_air_quality = []
 
     with open(file, "r") as file:
-        next(file)
-        for line in file:
-            line = line.strip()
-            parts = line.split(",")
-
+        reader = csv.reader(file)
+        next(reader)
+        for parts in reader:
             date = parts[0]
             city = parts[7]
             pm25 = parts[4]
+            ozone = parts[24]
 
-            if pm25 == "":
-                pm25 = None
-            else:
-                pm25 = float(pm25.replace('"', ''))
-
-            ozone = None
+            pm25 = float(pm25) if pm25 != "" else None
+            ozone = float(ozone) if ozone != "" else None
 
 
             record = AirQuality(city, date, pm25, ozone)
-            pm25_data_air_quality.append(record)
+            pm25_ozone_air_quality.append(record)
 
-    return pm25_data_air_quality
-
-
-
-def ozone_air_quality_data(file):
-    ozone_data_air_quality = []
-
-    with open(file, "r") as file:
-        next(file)
-        for line in file:
-            line = line.strip()
-            parts = line.split(",")
-
-            city = parts[6]
-            ozone = parts[3]
-            date = parts[20]
-
-            if ozone == "":
-                ozone = None
-            else:
-                ozone = float(ozone.replace('"', ''))
-
-            pm25 = None
-
-
-            record = AirQuality(city, date, pm25, ozone)
-            ozone_data_air_quality.append(record)
-
-    return ozone_data_air_quality
+    return pm25_ozone_air_quality
