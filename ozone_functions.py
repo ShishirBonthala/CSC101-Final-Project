@@ -27,4 +27,39 @@ def unhealthy_ozone_days(records):
 
 
 def city_ranks_by_ozone(city_averages):
-    cit
+    cities_with_ozone = [(city, data["avg_ozone"]) for city, data in city_averages.items()]
+    cities_with_ozone.sort(key=lambda x: x[1], reverse=True)
+    return cities_with_ozone
+
+
+
+def ozone_statistics(records):
+    ozone_values = [record.ozone for record in records if record.ozone is not None]
+    return {
+        "min": min(ozone_values),
+        "max": max(ozone_values),
+        "avg": sum(ozone_values) / len(ozone_values),
+        "count": len(ozone_values),
+    }
+
+
+def ozone_category(value):
+    if value is None:
+        return "No Data"
+    elif value <= 0.054:
+        return"Good"
+    elif value <= 0.070:
+        return "Moderate"
+    elif value <= 0.085:
+        return "Unhealthy for certain groups"
+    else:
+        return "Unhealthy"
+
+
+def ozone_distribution(records):
+    distribution = defaultdict(int)
+    for record in records:
+        if record.ozone is not None:
+            category = record.ozone_category()
+            distribution[category] += 1
+    return dict(distribution)
