@@ -3,6 +3,7 @@ AirQuality class
 Purpose: Hold one day's air quality readings (city, date, PM2.5, ozone, and optional AQI) and provide simple helper methods for health checks and categories.
 Inputs to constructor: city (str), date (str), pm25 (float or None), ozone (float or None), aqi (int or None)
 Example: AirQuality("LA","01/01/25", 12.5, 0.055, 65)
+Authors: Shishir and Drew
 """
 class AirQuality:
     """Simple data holder for one day's readings."""

@@ -8,6 +8,7 @@ Purpose: Load daily air quality records (PM2.5 and ozone) for California cities 
 Input: Optional command line argument with CSV filename (defaults to 'ozone_pm25_data.csv').
 Output: Printed lines to the console.
 Example: python main.py ozone_pm25_data.csv
+Author: Drew
 """
 import sys
 from file_handling import ozone_pm25_air_quality
