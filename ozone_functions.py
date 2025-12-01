@@ -1,7 +1,7 @@
 """
 Ozone Analysis Functions
 Functions for analyzing ground-level ozone data.
-Author: Drew
+Author: Shishir
 """
 
 from data import AirQuality

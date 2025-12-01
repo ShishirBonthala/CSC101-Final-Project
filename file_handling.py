@@ -1,6 +1,6 @@
 """File Handling Functions
 Purpose: Load CSV rows and convert them into AirQuality objects.
-Author: Drew
+Author: Shishir
 """
 import csv
 from data import AirQuality
