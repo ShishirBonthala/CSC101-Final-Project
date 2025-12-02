@@ -27,3 +27,4 @@ def ozone_pm25_air_quality(file):
             record = AirQuality(city, date, pm25, ozone)
             pm25_ozone_air_quality.append(record)
     return pm25_ozone_air_quality
+
