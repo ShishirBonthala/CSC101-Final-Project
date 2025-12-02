@@ -111,6 +111,21 @@ def main(csv_path):
 
     # Brief, data-driven insight
     # Insight block removed for minimal output
+    print("\nSocial Responsibility Insight:")
+    # Build short lists for mention
+    pm_focus = []
+    for i in range(len(pm25_top3)):
+        pm_focus.append(pm25_top3[i][0])
+    o3_focus = []
+    for i in range(len(ozone_top3)):
+        o3_focus.append(ozone_top3[i][0])
+    pm_list = ", ".join(pm_focus)
+    o3_list = ", ".join(o3_focus)
+    print(" - Higher particulate (PM2.5) averages in: " + pm_list)
+    print(" - Higher ozone averages in: " + o3_list)
+    print(" - These communities may face greater respiratory and heart stress on bad air days.")
+    print(" - Results suggest focusing mitigation (emissions cuts, wildfire smoke response, alerts) on these areas.")
+    print(" - Even simple analysis helps highlight where cleaner air efforts could have more impact.")
 
 
 if __name__ == "__main__":
